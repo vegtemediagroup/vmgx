@@ -1,6 +1,6 @@
 {
   "name": "@vmgx/vmgx",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Reference parser for VMGX, a lightweight, human-readable data format for structured records, rich metadata and long-term digital preservation.",
   "main": "vmgx.js",
   "types": "vmgx.d.ts",
