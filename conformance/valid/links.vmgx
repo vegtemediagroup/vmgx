@@ -1,0 +1,4 @@
+web: <https://example.com/a?b=1&c=2#d>
+mail: <mailto:info@example.com>
+urn: <urn:isbn:9780000000000>
+padded: < https://example.com >

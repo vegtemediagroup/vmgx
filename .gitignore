@@ -1,0 +1,16 @@
+.DS_Store
+node_modules/
+dist/
+build/
+*.egg-info/
+__pycache__/
+*.tgz
+*.vsix
+site/vmgx-conformance.zip
+mac/VMGX/.tools/
+mac/VMGX/build/
+mac/VMGX/VMGX.xcodeproj/
+mac/VMGX/Resources/AppIcon.icns
+mac/VMGX/Support/*.plist
+mac/VMGX/Support/*.entitlements
+.pypirc

@@ -1,0 +1,10 @@
+text: "hello"
+int: 248
+neg: -3
+zero: 0
+decimal: 19.95
+exp: 1.5e3
+exp2: 2E-2
+yes: true
+no: false
+nothing: null

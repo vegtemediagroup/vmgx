@@ -1,0 +1,19 @@
+@vmgx 1.0
+# Sample archival description (fictional)
+
+@id: "archive-2026-0412"
+@type: "letter"
+@created: 2026-11-15T10:30:00+01:00
+@source: "Fictional family collection, box 3, folder 12"
+@license: "CC BY 4.0"
+@lang: "en"
+
+sender: "M. Clarke"
+recipient: "The Clarke family"
+written: 1953-09-02
+pages: 2
+scan: <https://example.com/archive/2026-0412.pdf>
+transcription: """
+    Dear family,
+    The harvest is in and the weather has turned.
+    """

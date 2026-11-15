@@ -1,0 +1,7 @@
+{
+  "s": "quote \" backslash \\ slash / nl \n tab \t cr \r bs \b ff \f",
+  "u4": "\u00e9",
+  "ubrace": "\ud83d\ude00",
+  "pair": "\ud83d\ude00",
+  "raw": "\u00e9 \ud83d\ude00 \tx"
+}

@@ -1,0 +1,101 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "VMGX",
+  "scopeName": "source.vmgx",
+  "fileTypes": ["vmgx"],
+  "patterns": [
+    { "include": "#header" },
+    { "include": "#comment" },
+    { "include": "#textblock" },
+    { "include": "#quoted-key" },
+    { "include": "#meta-key" },
+    { "include": "#key" },
+    { "include": "#value" },
+    { "include": "#punctuation" }
+  ],
+  "repository": {
+    "header": {
+      "match": "^\\s*(@vmgx)[ \\t]+(\\d+\\.\\d+)\\b",
+      "captures": {
+        "1": { "name": "keyword.control.directive.vmgx" },
+        "2": { "name": "constant.numeric.version.vmgx" }
+      }
+    },
+    "comment": {
+      "match": "#.*$",
+      "name": "comment.line.number-sign.vmgx"
+    },
+    "textblock": {
+      "begin": "\"\"\"",
+      "end": "\"\"\"",
+      "name": "string.quoted.triple.vmgx"
+    },
+    "quoted-key": {
+      "match": "(\"(?:[^\"\\\\]|\\\\.)*\")(?=[ \\t]*:)",
+      "captures": {
+        "1": { "name": "support.type.property-name.vmgx" }
+      }
+    },
+    "meta-key": {
+      "match": "(@[A-Za-z_][\\w-]*)(?=[ \\t]*:)",
+      "name": "variable.other.metadata.vmgx"
+    },
+    "key": {
+      "match": "([A-Za-z_][\\w-]*)(?=[ \\t]*:)",
+      "name": "support.type.property-name.vmgx"
+    },
+    "value": {
+      "patterns": [
+        { "include": "#string" },
+        { "include": "#link" },
+        { "include": "#datetime" },
+        { "include": "#date" },
+        { "include": "#number" },
+        { "include": "#constant" }
+      ]
+    },
+    "string": {
+      "begin": "\"",
+      "end": "\"|$",
+      "name": "string.quoted.double.vmgx",
+      "patterns": [
+        {
+          "match": "\\\\(?:[\"\\\\/bfnrt]|u[0-9a-fA-F]{4}|u\\{[0-9a-fA-F]{1,6}\\})",
+          "name": "constant.character.escape.vmgx"
+        },
+        {
+          "match": "\\\\.",
+          "name": "invalid.illegal.escape.vmgx"
+        }
+      ]
+    },
+    "link": {
+      "match": "<[^>\\s]+>",
+      "name": "markup.underline.link.vmgx"
+    },
+    "datetime": {
+      "match": "\\b\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2}(?:\\.\\d+)?)?(?:Z|[+-]\\d{2}:\\d{2})?",
+      "name": "constant.other.datetime.vmgx"
+    },
+    "date": {
+      "match": "\\b\\d{4}-\\d{2}-\\d{2}\\b",
+      "name": "constant.other.date.vmgx"
+    },
+    "number": {
+      "match": "-?\\b(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?\\b",
+      "name": "constant.numeric.vmgx"
+    },
+    "constant": {
+      "match": "\\b(?:true|false|null)\\b",
+      "name": "constant.language.vmgx"
+    },
+    "punctuation": {
+      "patterns": [
+        { "match": "[{}]", "name": "punctuation.definition.dictionary.vmgx" },
+        { "match": "[\\[\\]]", "name": "punctuation.definition.array.vmgx" },
+        { "match": ",", "name": "punctuation.separator.vmgx" },
+        { "match": ":", "name": "punctuation.separator.key-value.vmgx" }
+      ]
+    }
+  }
+}

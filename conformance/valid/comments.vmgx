@@ -1,0 +1,11 @@
+# leading comment
+@vmgx 1.0 # header comment
+# between
+a: 1 # trailing
+b: [ # after bracket
+  1 # item
+  # own line
+  2
+] # after list
+c: "#not a comment"
+# final

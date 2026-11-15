@@ -1,0 +1,14 @@
+{
+  "web": {
+    "@link": "https://example.com/a?b=1&c=2#d"
+  },
+  "mail": {
+    "@link": "mailto:info@example.com"
+  },
+  "urn": {
+    "@link": "urn:isbn:9780000000000"
+  },
+  "padded": {
+    "@link": "https://example.com"
+  }
+}

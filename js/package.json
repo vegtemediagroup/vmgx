@@ -1,0 +1,39 @@
+{
+  "name": "vmgx",
+  "version": "1.0.1",
+  "description": "Reference parser for VMGX, a lightweight, human-readable data format for structured records, rich metadata and long-term digital preservation.",
+  "main": "vmgx.js",
+  "types": "vmgx.d.ts",
+  "files": [
+    "vmgx.js",
+    "vmgx.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "vmgx",
+    "data format",
+    "serialization",
+    "parser",
+    "metadata",
+    "archiving",
+    "digital preservation",
+    "json"
+  ],
+  "homepage": "https://vmgx.vegte.org",
+  "repository": {
+    "type": "git",
+    "url": "git+https://codeberg.org/vmgx/vmgx.git"
+  },
+  "bugs": {
+    "url": "https://codeberg.org/vmgx/vmgx/issues"
+  },
+  "author": "Vegte Media Group",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14"
+  }
+}

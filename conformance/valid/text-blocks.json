@@ -1,0 +1,6 @@
+{
+  "a": "line one\n\n  indented\nline # not a comment \\n raw",
+  "b": "one line",
+  "c": "no indent",
+  "d": "first line kept\n    second"
+}

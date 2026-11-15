@@ -1,0 +1,5 @@
+s: "quote \" backslash \\ slash \/ nl \n tab \t cr \r bs \b ff \f"
+u4: "\u00e9"
+ubrace: "\u{1F600}"
+pair: "\uD83D\uDE00"
+raw: "é 😀 	x"

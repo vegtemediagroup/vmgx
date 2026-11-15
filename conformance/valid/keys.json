@@ -1,0 +1,13 @@
+{
+  "plain": 1,
+  "with-hyphen": 2,
+  "with_underscore": 3,
+  "_lead": 4,
+  "Case": 5,
+  "case": 6,
+  "two words": 7,
+  "": 8,
+  "@meta": 9,
+  "true": 10,
+  "null": 11
+}

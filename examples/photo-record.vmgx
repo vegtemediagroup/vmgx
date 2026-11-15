@@ -1,0 +1,14 @@
+@vmgx 1.0
+
+@id: "vmg-img-0042"
+@type: "image"
+@license: "CC BY 4.0"
+
+title: "Harbor at dusk"
+taken: 2026-09-21T19:42:00+02:00
+dimensions: { width: 4032, height: 3024 }
+tags: ["harbor", "evening", "coast"]
+caption: """
+    The old harbor,
+    photographed just after sunset.
+    """

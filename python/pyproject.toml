@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vmgx"
+version = "1.0.1"
+description = "Reference parser for VMGX, a lightweight, human-readable data format for structured records, rich metadata and long-term digital preservation."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Vegte Media Group" }]
+keywords = ["vmgx", "data format", "serialization", "parser", "metadata", "archiving", "digital preservation", "json"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: File Formats",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: System :: Archiving",
+]
+
+[project.urls]
+Homepage = "https://vmgx.vegte.org"
+Specification = "https://vmgx.vegte.org/spec.html"
+Source = "https://codeberg.org/vmgx/vmgx"
+Issues = "https://codeberg.org/vmgx/vmgx/issues"
+
+[project.scripts]
+vmgx = "vmgx:main"
+
+[tool.setuptools]
+py-modules = ["vmgx"]

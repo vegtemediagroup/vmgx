@@ -1,0 +1,82 @@
+{
+  "name": "vmgx",
+  "displayName": "VMGX",
+  "description": "Syntax colors, live error checking, formatting and JSON conversion for VMGX (.vmgx) files.",
+  "version": "1.0.1",
+  "publisher": "vegtemediagroup",
+  "license": "MIT",
+  "homepage": "https://vmgx.vegte.org",
+  "repository": {
+    "type": "git",
+    "url": "https://codeberg.org/vmgx/vmgx.git"
+  },
+  "bugs": {
+    "url": "https://codeberg.org/vmgx/vmgx/issues"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Formatters",
+    "Linters"
+  ],
+  "keywords": [
+    "vmgx",
+    "data format",
+    "metadata",
+    "archiving"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "languages": [
+      {
+        "id": "vmgx",
+        "aliases": [
+          "VMGX",
+          "vmgx"
+        ],
+        "extensions": [
+          ".vmgx"
+        ],
+        "mimetypes": [
+          "application/vnd.vmg.vmgx"
+        ],
+        "firstLine": "^\\s*@vmgx\\s+\\d+\\.\\d+",
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "vmgx",
+        "scopeName": "source.vmgx",
+        "path": "./syntaxes/vmgx.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "vmgx.toJSON",
+        "title": "Convert to JSON",
+        "category": "VMGX"
+      },
+      {
+        "command": "vmgx.toTypedJSON",
+        "title": "Convert to Typed JSON",
+        "category": "VMGX"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "vmgx.toJSON",
+          "when": "editorLangId == vmgx"
+        },
+        {
+          "command": "vmgx.toTypedJSON",
+          "when": "editorLangId == vmgx"
+        }
+      ]
+    }
+  }
+}

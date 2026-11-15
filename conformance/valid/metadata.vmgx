@@ -1,0 +1,8 @@
+@id: "doc-1"
+@created: 2026-11-14T10:00:00Z
+title: "Record"
+part: {
+  @id: "part-1"
+  @source: <https://example.com/source>
+  name: "Part"
+}

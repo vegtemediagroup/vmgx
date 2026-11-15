@@ -1,0 +1,101 @@
+# XcodeGen project description. build.sh turns this into VMGX.xcodeproj.
+name: VMGX
+options:
+  bundleIdPrefix: org.vegte
+  deploymentTarget:
+    macOS: "13.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    MACOSX_DEPLOYMENT_TARGET: "13.0"
+    # Signed only for this Mac ("Sign to Run Locally"). No Apple Developer account needed.
+    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGN_STYLE: Manual
+    DEVELOPMENT_TEAM: ""
+    ENABLE_HARDENED_RUNTIME: NO
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+
+targets:
+  VMGX:
+    type: application
+    platform: macOS
+    sources:
+      - path: App
+      - path: Shared/VMGXEngine.swift
+      - path: Shared/js
+        buildPhase: resources
+      - path: Resources/AppIcon.icns
+        optional: true
+        buildPhase: resources
+    dependencies:
+      - target: VMGXQuickLook
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.vegte.VMGX
+        PRODUCT_NAME: VMGX
+    info:
+      path: Support/App-Info.plist
+      properties:
+        CFBundleDisplayName: VMGX
+        CFBundleName: VMGX
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleIconFile: AppIcon
+        LSApplicationCategoryType: public.app-category.productivity
+        NSHumanReadableCopyright: © 2026 Vegte Media Group
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: VMGX Document
+            CFBundleTypeRole: Editor
+            LSHandlerRank: Owner
+            LSItemContentTypes:
+              - org.vegte.vmgx
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: org.vegte.vmgx
+            UTTypeDescription: VMGX Document
+            UTTypeConformsTo:
+              - public.plain-text
+            UTTypeReferenceURL: https://vmgx.vegte.org/spec.html
+            UTTypeTagSpecification:
+              public.filename-extension:
+                - vmgx
+              public.mime-type:
+                - application/vnd.vmg.vmgx
+    scheme: {}
+
+  VMGXQuickLook:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: QuickLook
+      - path: Shared/VMGXEngine.swift
+      - path: Shared/js
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.vegte.VMGX.QuickLook
+        PRODUCT_NAME: VMGXQuickLook
+        SKIP_INSTALL: YES
+    entitlements:
+      path: Support/QuickLook.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-only: true
+    info:
+      path: Support/QuickLook-Info.plist
+      properties:
+        CFBundleDisplayName: VMGX Quick Look
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.quicklook.preview
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PreviewProvider
+          NSExtensionAttributes:
+            QLIsDataBasedPreview: true
+            QLSupportsSearchableItems: false
+            QLSupportedContentTypes:
+              - org.vegte.vmgx
