@@ -57,7 +57,7 @@ In DROID byte-sequence notation: `40766D677820312E` and `EFBBBF40766D677820312E`
 
 **Related formats:** Derived from JSON (the "JSON Data Interchange Format" entry in PRONOM). Converts to JSON.
 
-**Software that creates or reads it:** vmgx (npm, JavaScript), vmgx (PyPI, Python, with command-line tool), VMGX for Mac, VMGX for Visual Studio Code.
+**Software that creates or reads it:** @vmgx/vmgx (npm, JavaScript), vmgx (PyPI, Python, with command-line tool), VMGX for Mac, VMGX for Visual Studio Code.
 
 **Notes:**
 A public conformance suite of 16 valid and 42 invalid documents defines exactly which documents are VMGX. Nesting is limited to 256 levels. Control characters and invalid Unicode are not allowed.

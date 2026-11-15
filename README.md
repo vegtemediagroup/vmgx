@@ -26,8 +26,8 @@ It keeps JSON's simplicity and adds what archives and publishers need: comments,
 ## Install
 
 ```
-npm install vmgx     # JavaScript and TypeScript
-pip install vmgx     # Python 3.11+, includes the `vmgx` command
+npm install @vmgx/vmgx   # JavaScript and TypeScript
+pip install vmgx         # Python 3.11+, includes the `vmgx` command
 ```
 
 ## What's here
@@ -35,7 +35,7 @@ pip install vmgx     # Python 3.11+, includes the `vmgx` command
 | Folder | What it is |
 | --- | --- |
 | [`spec/`](spec) | The specification (CC BY 4.0) |
-| [`js/`](js) | Reference parser for JavaScript: the `vmgx` npm package |
+| [`js/`](js) | Reference parser for JavaScript: the `@vmgx/vmgx` npm package |
 | [`python/`](python) | Reference parser for Python: the `vmgx` PyPI package |
 | [`conformance/`](conformance) | 16 valid and 42 invalid test files that define VMGX exactly |
 | [`vscode/`](vscode) | Extension for Visual Studio Code |

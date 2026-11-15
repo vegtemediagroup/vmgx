@@ -1,4 +1,4 @@
-# vmgx
+# @vmgx/vmgx
 
 The reference JavaScript parser for **VMGX**, a lightweight, human-readable data format for structured records, rich metadata and long-term digital preservation.
 
@@ -22,7 +22,7 @@ One file, no dependencies. Works in Node.js and in browsers, and includes TypeSc
 ## Install
 
 ```
-npm install vmgx
+npm install @vmgx/vmgx
 ```
 
 In a browser, without npm:
@@ -34,7 +34,7 @@ In a browser, without npm:
 ## Use
 
 ```js
-const VMGX = require("vmgx");   // or: import VMGX from "vmgx";
+const VMGX = require("@vmgx/vmgx");   // or: import VMGX from "@vmgx/vmgx";
 
 const record = VMGX.parse(text);
 record.title;                     // "Northern Light"

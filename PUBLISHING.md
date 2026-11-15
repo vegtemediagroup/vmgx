@@ -56,7 +56,7 @@ git push -u origin main --force
 
 ## Part 2: Publish to npm (15 minutes)
 
-*What it's for:* JavaScript developers can install VMGX with `npm install vmgx`.
+*What it's for:* JavaScript developers can install VMGX with `npm install @vmgx/vmgx`. (npm doesn't allow the plain name `vmgx`, because it is too close to other packages.)
 
 **2.1 Install Node.js** (skip if you already have it). In Terminal, type `node --version`. If you see a version number like `v22…`, skip to 2.2. If you see "command not found", go to <https://nodejs.org>, download the **LTS** version for macOS, open the downloaded file and click through the installer. Then close Terminal, open it again, and check `node --version` once more.
 
@@ -78,7 +78,7 @@ cd ..
 
 If asked, confirm with your second step (Touch ID, or a code).
 
-**2.4 Check it worked.** Open <https://www.npmjs.com/package/vmgx>.
+**2.4 Check it worked.** Open <https://www.npmjs.com/package/@vmgx/vmgx>.
 
 ---
 

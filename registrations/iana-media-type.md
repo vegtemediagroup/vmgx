@@ -34,7 +34,7 @@ VMGX converts losslessly to JSON (RFC 8259) at the data level. In "typed JSON" m
 VMGX Specification 1.0.1, Vegte Media Group, November 2026: https://vmgx.vegte.org/spec.html
 
 **Applications that use this media type:**
-Software for storing, archiving, publishing and exchanging structured records and their metadata; the reference parsers "vmgx" (npm and PyPI); VMGX for Mac (editor and Finder Quick Look preview); the VMGX extension for Visual Studio Code; the VMGX website playground.
+Software for storing, archiving, publishing and exchanging structured records and their metadata; the reference parsers "@vmgx/vmgx" (npm) and "vmgx" (PyPI); VMGX for Mac (editor and Finder Quick Look preview); the VMGX extension for Visual Studio Code; the VMGX website playground.
 
 **Fragment identifier considerations:**
 N/A
