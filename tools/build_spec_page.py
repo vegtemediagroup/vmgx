@@ -22,6 +22,7 @@ html = f'''<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="analytics.js"></script>
 <title>VMGX Specification 1.0.1 — Vegte Media Group Extended</title>
 <meta name="description" content="The VMGX specification: syntax, values, metadata, JSON conversion, errors, grammar and conformance.">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -48,6 +49,19 @@ html = f'''<!DOCTYPE html>
   header.nav a.back:hover {{ color:var(--gold-light) }}
   .layout {{ max-width:1120px; margin:0 auto; padding:56px 24px 96px; display:grid; grid-template-columns:240px 1fr; gap:56px }}
   @media (max-width:900px) {{ .layout {{ grid-template-columns:1fr }} aside {{ display:none }} }}
+  .layout > * {{ min-width:0 }}
+  pre.code {{ max-width:100% }}
+  @media (max-width:600px) {{
+    body {{ font-size:16px }}
+    header.nav .in {{ padding:0 18px }}
+    .layout {{ padding:36px 18px 64px; gap:0 }}
+    h1 {{ font-size:2.2rem }}
+    h2 {{ font-size:1.6rem; margin-top:1.8em }}
+    pre.code {{ font-size:.78rem; padding:16px }}
+    th, td {{ padding:9px 10px }}
+    .long {{ display:none }}
+    footer {{ padding:32px 18px }}
+  }}
   aside nav {{ position:sticky; top:96px; font-size:.9rem }}
   aside ol {{ list-style:none; padding:0; margin:0; border-left:2px solid var(--line) }}
   aside li a {{ display:block; padding:5px 0 5px 14px; color:var(--muted); text-decoration:none }}
@@ -73,7 +87,7 @@ html = f'''<!DOCTYPE html>
 <body>
 <header class="nav"><div class="in">
   <a class="brand" href="index.html"><img src="logo.png" alt="" data-fallback="mono"><strong>VMGX</strong></a>
-  <a class="back" href="index.html">← Back to the VMGX site</a>
+  <a class="back" href="index.html">← Back<span class="long"> to the VMGX site</span></a>
 </div></header>
 <div class="layout">
   <aside><nav><ol>{toc}</ol></nav></aside>
@@ -83,7 +97,7 @@ html = f'''<!DOCTYPE html>
     {body}
   </article>
 </div>
-<footer>© 2026 Vegte Media Group · This specification is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href="index.html">vmgx.vegte.org</a></footer>
+<footer>© 2026 Vegte Media Group · This specification is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href="index.html">vmgx.vegte.org</a> · <a href="#" data-cookie-settings>Cookie settings</a></footer>
 <script src="vmgx-render.js" defer></script>
 <script>
 document.querySelectorAll("img[data-fallback]").forEach(function (img) {{

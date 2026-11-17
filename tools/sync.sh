@@ -18,6 +18,14 @@ for d in js python vscode conformance mac/VMGX; do cp LICENSE "$d/LICENSE"; done
 cp LICENSE site/LICENSE.txt
 
 python3 tools/build_spec_page.py
+
+# Every page of the website must load analytics.js (Google Tag Manager with consent).
+missing=$(grep -L '<script src="analytics.js"></script>' site/*.html || true)
+if [ -n "$missing" ]; then
+  echo "✕ These pages do not include analytics.js. Add <script src=\"analytics.js\"></script> to their <head>:"
+  echo "$missing"
+  exit 1
+fi
 python3 python/test_vmgx.py
 node js/test.js
 python3 conformance/run_conformance.py

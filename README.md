@@ -47,6 +47,10 @@ pip install vmgx         # Python 3.11+, includes the `vmgx` command
 
 The JavaScript parser (`js/vmgx.js`) and the Python parser (`python/vmgx.py`) are the originals. After changing either, run `bash tools/sync.sh`: it copies them to the site, the VS Code extension and the Mac app, and runs every test.
 
+## Website pages
+
+Every page in `site/` must include `<script src="analytics.js"></script>` in its `<head>` and a `Cookie settings` link (`<a href="#" data-cookie-settings>Cookie settings</a>`) in its footer. `analytics.js` loads Google Tag Manager only after the visitor accepts. `tools/sync.sh` stops with an error if a page is missing it.
+
 ## Contributing
 
 Bug reports and suggestions are welcome as issues. Any change to the language starts as a change to the specification and the conformance suite; both parsers must pass the suite.

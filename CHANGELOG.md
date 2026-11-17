@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — website
+
+- Website works on phones (menu button, no sideways scrolling)
+- Google Tag Manager on every page, loaded only after the visitor accepts the cookie banner; "Cookie settings" link in each footer
+- `tools/sync.sh` checks that every page includes `analytics.js`
+
+## npm 1.0.2 — November 2026
+
+- Republished the npm package `@vmgx/vmgx` with all its files; 1.0.1 was incomplete and is deprecated
+
 ## 1.0.1 — November 2026
 
 Language version 1.0, specification 1.0.1.
