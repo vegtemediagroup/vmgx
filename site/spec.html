@@ -23,8 +23,7 @@
   header.nav { position:sticky; top:0; z-index:5; background:rgba(11,21,48,.97); border-bottom:1px solid rgba(200,162,74,.25) }
   header.nav .in { max-width:1120px; margin:0 auto; padding:0 24px; height:64px; display:flex; align-items:center; justify-content:space-between }
   .brand { display:flex; align-items:center; gap:12px; color:#fff; text-decoration:none }
-  .brand img, .brand .mono { width:34px; height:34px; border-radius:4px }
-  .mono { display:inline-grid; place-items:center; background:var(--gold); color:var(--navy-900); font:700 1.2rem var(--serif) }
+  .brand img { width:34px; height:34px; border-radius:4px }
   .brand strong { font:700 1.45rem var(--serif); letter-spacing:.06em }
   header.nav a.back { color:#d9deea; text-decoration:none; font-size:.92rem }
   header.nav a.back:hover { color:var(--gold-light) }
@@ -67,7 +66,7 @@
 </head>
 <body>
 <header class="nav"><div class="in">
-  <a class="brand" href="index.html"><img src="logo.png" alt="" data-fallback="mono"><strong>VMGX</strong></a>
+  <a class="brand" href="index.html"><img src="logo.svg" alt=""><strong>VMGX</strong></a>
   <a class="back" href="index.html">← Back<span class="long"> to the VMGX site</span></a>
 </div></header>
 <div class="layout">
@@ -397,10 +396,6 @@ comment   = &quot;#&quot; *any-except-newline
 <footer>© 2026 Vegte Media Group · This specification is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href="index.html">vmgx.vegte.org</a> · <a href="#" data-cookie-settings>Cookie settings</a></footer>
 <script src="vmgx-render.js" defer></script>
 <script>
-document.querySelectorAll("img[data-fallback]").forEach(function (img) {
-  function swap() { var m = document.createElement("span"); m.className = "mono"; m.textContent = "V"; img.replaceWith(m); }
-  if (img.complete && img.naturalWidth === 0) swap(); else img.addEventListener("error", swap);
-});
 window.addEventListener("DOMContentLoaded", function () {
   if (!window.VMGXRender) return;
   document.querySelectorAll('pre[data-hl="vmgx"] code').forEach(function (c) {

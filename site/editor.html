@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="analytics.js"></script>
+<title>VMGX Editor — Vegte Media Group Extended</title>
+<meta name="description" content="Write, check and preview VMGX files in your browser.">
+<link rel="canonical" href="https://vmgx.vegte.org/editor.html">
+<meta name="theme-color" content="#0b1530">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="logo.png">
+<style>
+  :root {
+    --navy: #0b1530; --navy-2: #12204a; --gold: #c8a24a; --gold-light: #e2c77f;
+    --bg: #fbf9f4; --panel: #fffdf8; --fg: #1a1f2e; --muted: #6b7285; --line: #e2dccd;
+    --sel: rgba(200,162,74,.32); --errline: rgba(196,60,50,.13); --err: #b5473a; --ok: #3f8f5f;
+    --t-key: #8a6a1c; --t-meta: #b0561a; --t-str: #2f7a3e; --t-num: #1f5fa8; --t-date: #7b3fa0;
+    --t-link: #137a86; --t-kw: #b03050; --t-com: #8a90a0; --t-punc: #8a90a0; --t-head: #a8842f;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --fs: 13.5px; --lh: 21px; --pad: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1528; --panel: #0b1124; --fg: #e4e8f2; --muted: #9aa3b8; --line: #253158;
+      --sel: rgba(226,199,127,.28); --errline: rgba(240,110,100,.16); --err: #f2a69c; --ok: #7fd0a0;
+      --t-key: #e2c77f; --t-meta: #f0a868; --t-str: #9fd3a8; --t-num: #8fc1f0; --t-date: #d6a8f0;
+      --t-link: #7fd6e0; --t-kw: #f08fa0; --t-com: #6f7a96; --t-punc: #7d87a3; --t-head: #e2c77f;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { display: flex; flex-direction: column; background: var(--bg); color: var(--fg); font: 14px/1.4 var(--sans); }
+  button { font: inherit; }
+
+  /* Toolbar */
+  .bar { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--navy); color: #e6e9f2; border-bottom: 1px solid rgba(200,162,74,.3); flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 8px; color: #fff; text-decoration: none; font-weight: 700; letter-spacing: .06em; }
+  .brand img { width: 26px; height: 26px; border-radius: 4px; }
+  .doc { display: flex; align-items: center; gap: 6px; min-width: 0; flex: 1; color: #c9d0e0; }
+  .doc .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .doc .dirty { color: var(--gold-light); }
+  .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .actions .sep { width: 1px; background: rgba(226,199,127,.3); margin: 2px 4px; }
+  .btn { background: transparent; color: var(--gold-light); border: 1px solid rgba(226,199,127,.4); border-radius: 6px; padding: 6px 11px; cursor: pointer; font-size: 13px; white-space: nowrap; }
+  .btn:hover { border-color: var(--gold-light); color: #fff; }
+  .btn:disabled { opacity: .4; cursor: default; }
+  .btn.primary { background: var(--gold); color: var(--navy); border-color: var(--gold); font-weight: 600; }
+  .btn.primary:hover { background: var(--gold-light); color: var(--navy); }
+
+  /* Split view */
+  .split { flex: 1; display: grid; grid-template-columns: 1fr 1fr; min-height: 0; }
+  .pane { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+  .pane + .pane { border-left: 1px solid var(--line); }
+  .pane-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 12px; border-bottom: 1px solid var(--line); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); min-height: 38px; }
+  .tabs { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+  .tabs button { background: transparent; color: var(--muted); border: 0; padding: 4px 10px; cursor: pointer; font-size: 12px; letter-spacing: 0; text-transform: none; }
+  .tabs button[aria-selected="true"] { background: var(--gold); color: var(--navy); }
+
+  /* Editor: a transparent textarea over a highlighted copy of the same text */
+  .code { position: relative; flex: 1; min-height: 0; background: var(--panel); overflow: hidden; }
+  .code textarea, .code pre { position: absolute; inset: 0; margin: 0; padding: var(--pad); border: 0;
+    font: var(--fs)/var(--lh) var(--mono); tab-size: 2; white-space: pre; overflow-wrap: normal; letter-spacing: 0; }
+  .code pre { overflow: hidden; color: var(--fg); pointer-events: none; }
+  .code textarea { width: 100%; height: 100%; resize: none; outline: none; background: transparent; color: transparent;
+    caret-color: var(--fg); overflow: auto; z-index: 1; }
+  .code textarea::selection { background: var(--sel); color: transparent; }
+  .errline { position: absolute; left: 0; right: 0; height: var(--lh); background: var(--errline); pointer-events: none; }
+  .t-key { color: var(--t-key); } .t-meta { color: var(--t-meta); } .t-str, .t-text { color: var(--t-str); }
+  .t-num { color: var(--t-num); } .t-date { color: var(--t-date); } .t-link { color: var(--t-link); }
+  .t-kw { color: var(--t-kw); } .t-com { color: var(--t-com); font-style: italic; } .t-punc { color: var(--t-punc); }
+  .t-head { color: var(--t-head); font-weight: 600; }
+
+  .view { flex: 1; width: 100%; border: 0; background: var(--bg); min-height: 0; }
+
+  /* Status bar */
+  .status { display: flex; align-items: center; gap: 8px; padding: 5px 12px; border-top: 1px solid var(--line); background: var(--panel); font-size: 12px; color: var(--muted); }
+  .status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex: none; }
+  .status.bad .dot { background: var(--err); }
+  .status .msg { background: none; border: 0; padding: 0; color: inherit; text-align: left; cursor: default; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+  .status.bad .msg { color: var(--err); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+  .status .spacer { flex: 1; }
+  .status a { color: var(--muted); }
+
+  .toast { position: fixed; left: 50%; bottom: 44px; transform: translateX(-50%); background: var(--navy); color: #fff; border: 1px solid rgba(200,162,74,.5); padding: 8px 14px; border-radius: 6px; font-size: 13px; z-index: 50; }
+  .drop { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: rgba(11,21,48,.82); color: var(--gold-light); font-size: 20px; border: 3px dashed var(--gold); }
+  [hidden] { display: none !important; }
+
+  @media (max-width: 760px) {
+    .split { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+    .pane + .pane { border-left: 0; border-top: 1px solid var(--line); }
+    .actions { width: 100%; }
+    .actions .sep { display: none; }
+    .btn { padding: 6px 9px; font-size: 12.5px; }
+    :root { --fs: 12.5px; --lh: 19px; --pad: 10px; }
+  }
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="index.html" title="VMGX website"><img src="logo.svg" alt="">VMGX</a>
+  <div class="doc" title="Current file"><span class="name" id="name">Untitled.vmgx</span><span class="dirty" id="dirty" hidden title="Unsaved changes">●</span></div>
+  <div class="actions" role="toolbar" aria-label="File and document actions">
+    <button class="btn" id="b-new" type="button" title="New document">New</button>
+    <button class="btn" id="b-open" type="button" title="Open a file (Ctrl/⌘ O)">Open</button>
+    <button class="btn primary" id="b-save" type="button" title="Save (Ctrl/⌘ S)">Save</button>
+    <button class="btn" id="b-saveas" type="button" title="Save as a new file (Ctrl/⌘ Shift S)">Save as</button>
+    <span class="sep" aria-hidden="true"></span>
+    <button class="btn" id="b-format" type="button" title="Tidy the layout">Format</button>
+    <button class="btn" id="b-copy" type="button" title="Copy as JSON">Copy JSON</button>
+    <button class="btn" id="b-export" type="button" title="Save as a JSON file">Export JSON</button>
+  </div>
+</header>
+
+<main class="split">
+  <section class="pane" aria-label="Editor">
+    <div class="pane-head"><span>VMGX</span><span id="pos"></span></div>
+    <div class="code" id="code">
+      <pre aria-hidden="true"><code id="hl"></code></pre>
+      <div class="errline" id="errline" hidden></div>
+      <textarea id="src" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" wrap="off" aria-label="VMGX text"></textarea>
+    </div>
+  </section>
+  <section class="pane" aria-label="Preview">
+    <div class="pane-head">
+      <span>Preview</span>
+      <div class="tabs" role="tablist" aria-label="Preview mode">
+        <button type="button" role="tab" data-mode="record" aria-selected="true">Record</button>
+        <button type="button" role="tab" data-mode="json" aria-selected="false">JSON</button>
+        <button type="button" role="tab" data-mode="typed" aria-selected="false">Typed JSON</button>
+      </div>
+    </div>
+    <iframe class="view" id="view" title="Preview" sandbox="allow-popups allow-popups-to-escape-sandbox"></iframe>
+  </section>
+</main>
+
+<footer class="status" id="status">
+  <span class="dot" aria-hidden="true"></span>
+  <button class="msg" id="msg" type="button">Reading…</button>
+  <span class="spacer"></span>
+  <a href="#" data-cookie-settings>Cookie settings</a>
+</footer>
+
+<input type="file" id="picker" accept=".vmgx,application/vnd.vmg.vmgx,text/plain" hidden>
+<div class="drop" id="drop" hidden>Drop a .vmgx file to open it</div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="vmgx.js"></script>
+<script src="vmgx-render.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var ta = $("src"), hl = $("hl"), pre = hl.parentNode, errline = $("errline");
+  var view = $("view"), status = $("status"), msg = $("msg"), pos = $("pos");
+  var state = { name: "Untitled.vmgx", handle: null, saved: "", mode: "record", analysis: null, timer: 0 };
+  var canPick = "showOpenFilePicker" in window;
+  var canSavePick = "showSaveFilePicker" in window;
+  var VMGX_TYPE = [{ description: "VMGX document", accept: { "application/vnd.vmg.vmgx": [".vmgx"] } }];
+
+  function newTemplate() {
+    var d = new Date(), off = -d.getTimezoneOffset(), a = Math.abs(off);
+    function p(n) { return (n < 10 ? "0" : "") + n; }
+    var stamp = d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) + "T" + p(d.getHours()) + ":" +
+      p(d.getMinutes()) + ":" + p(d.getSeconds()) + (off === 0 ? "Z" : (off < 0 ? "-" : "+") + p(Math.floor(a / 60)) + ":" + p(a % 60));
+    return '@vmgx 1.0\n\n@id: "new-record"\n@created: ' + stamp + '\n\ntitle: "Untitled"\n';
+  }
+
+  function toast(text) {
+    var t = $("toast"); t.textContent = text; t.hidden = false;
+    clearTimeout(toast.timer); toast.timer = setTimeout(function () { t.hidden = true; }, 2200);
+  }
+
+  // ---- Document state ------------------------------------------------------
+  function isDirty() { return ta.value !== state.saved; }
+  function updateTitle() {
+    $("name").textContent = state.name;
+    $("dirty").hidden = !isDirty();
+    document.title = (isDirty() ? "● " : "") + state.name + " — VMGX";
+  }
+  function setDocument(text, name, handle) {
+    ta.value = text;
+    state.name = name || "Untitled.vmgx";
+    state.handle = handle || null;
+    state.saved = text;
+    ta.scrollTop = 0; ta.scrollLeft = 0;
+    ta.setSelectionRange(0, 0);
+    analyze();
+    updateTitle();
+  }
+  function confirmDiscard() {
+    return !isDirty() || window.confirm("Your changes to " + state.name + " are not saved. Continue without saving?");
+  }
+
+  // ---- Highlighting and analysis --------------------------------------------
+  function paint() {
+    hl.innerHTML = VMGXRender.highlightHTML(ta.value) + "\n ";
+    syncScroll();
+  }
+  function syncScroll() {
+    pre.scrollTop = ta.scrollTop;
+    pre.scrollLeft = ta.scrollLeft;
+    placeErrorLine();
+  }
+  function placeErrorLine() {
+    var a = state.analysis;
+    if (!a || a.ok || !a.error) { errline.hidden = true; return; }
+    var lh = parseFloat(getComputedStyle(ta).lineHeight), pad = parseFloat(getComputedStyle(ta).paddingTop);
+    errline.style.top = (pad + (a.error.line - 1) * lh - ta.scrollTop) + "px";
+    errline.hidden = false;
+  }
+  function analyze() {
+    paint();
+    try {
+      state.analysis = JSON.parse(VMGXRender.analyzeJSON(ta.value, { title: state.name }));
+    } catch (e) {
+      state.analysis = null;
+    }
+    showPreview();
+    showStatus();
+    placeErrorLine();
+  }
+  function schedule() {
+    paint();
+    updateTitle();
+    clearTimeout(state.timer);
+    state.timer = setTimeout(analyze, 180);
+  }
+  function showStatus() {
+    var a = state.analysis;
+    var ok = !!(a && a.ok);
+    status.classList.toggle("bad", !ok);
+    if (!a) { msg.textContent = "The VMGX engine could not be loaded."; return; }
+    msg.textContent = ok ? a.summary : "Line " + a.error.line + ", column " + a.error.column + ": " + a.error.reason;
+    msg.title = ok ? "" : "Go to the problem";
+    ["b-format", "b-copy", "b-export"].forEach(function (id) { $(id).disabled = !ok; });
+  }
+  function showPreview() {
+    var a = state.analysis;
+    if (!a) return;
+    var html = state.mode === "json" ? a.jsonHTML : state.mode === "typed" ? a.typedJsonHTML : a.previewHTML;
+    view.srcdoc = html.replace("<head>", '<head><base target="_blank">');
+  }
+
+  function showCursor() {
+    var before = ta.value.slice(0, ta.selectionStart);
+    var line = before.split("\n").length, col = ta.selectionStart - before.lastIndexOf("\n");
+    pos.textContent = "Line " + line + ", column " + col;
+  }
+
+  // ---- Editing helpers ------------------------------------------------------
+  // insertText keeps the browser's undo history intact.
+  function insertText(text) {
+    if (!(document.execCommand && document.execCommand("insertText", false, text))) {
+      var s = ta.selectionStart, e = ta.selectionEnd;
+      ta.setRangeText(text, s, e, "end");
+    }
+    schedule();
+  }
+  function replaceAll(text) {
+    ta.focus();
+    ta.select();
+    insertText(text);
+    if (ta.value !== text) { ta.value = text; schedule(); }
+  }
+
+  // ---- Files ----------------------------------------------------------------
+  async function openFile() {
+    if (!confirmDiscard()) return;
+    if (!canPick) { $("picker").click(); return; }
+    try {
+      var handles = await window.showOpenFilePicker({ types: VMGX_TYPE, excludeAcceptAllOption: false, multiple: false });
+      await openHandle(handles[0]);
+    } catch (e) {
+      if (e.name !== "AbortError") toast("Could not open the file.");
+    }
+  }
+  async function openHandle(handle) {
+    var file = await handle.getFile();
+    setDocument(await file.text(), file.name, handle);
+  }
+  function withExtension(name, ext) {
+    return /\.[^./\\]+$/.test(name) ? name.replace(/\.[^./\\]+$/, ext) : name + ext;
+  }
+  function download(text, name, type) {
+    var url = URL.createObjectURL(new Blob([text], { type: type }));
+    var a = document.createElement("a");
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+  async function writeHandle(handle, text) {
+    var w = await handle.createWritable();
+    await w.write(text);
+    await w.close();
+  }
+  async function save() {
+    if (state.handle && state.handle.createWritable) {
+      try {
+        await writeHandle(state.handle, ta.value);
+        state.saved = ta.value; updateTitle(); toast("Saved");
+      } catch (e) {
+        toast("Could not save. Try Save as.");
+      }
+      return;
+    }
+    await saveAs();
+  }
+  async function saveAs() {
+    var name = withExtension(state.name, ".vmgx");
+    if (canSavePick) {
+      try {
+        var handle = await window.showSaveFilePicker({ suggestedName: name, types: VMGX_TYPE });
+        await writeHandle(handle, ta.value);
+        state.handle = handle; state.name = handle.name || name;
+        state.saved = ta.value; updateTitle(); toast("Saved");
+      } catch (e) {
+        if (e.name !== "AbortError") toast("Could not save the file.");
+      }
+      return;
+    }
+    download(ta.value, name, "application/vnd.vmg.vmgx");
+    state.name = name; state.saved = ta.value; updateTitle();
+    toast("Downloaded " + name);
+  }
+  function currentJSON() {
+    analyze();
+    var a = state.analysis;
+    if (!a || !a.ok) return null;
+    return state.mode === "typed" ? a.typedJson : a.json;
+  }
+  async function exportJSON() {
+    var json = currentJSON();
+    if (json === null) return;
+    var name = withExtension(state.name, state.mode === "typed" ? ".typed.json" : ".json");
+    if (canSavePick) {
+      try {
+        var h = await window.showSaveFilePicker({ suggestedName: name, types: [{ description: "JSON", accept: { "application/json": [".json"] } }] });
+        await writeHandle(h, json + "\n");
+        toast("Exported " + (h.name || name));
+      } catch (e) {
+        if (e.name !== "AbortError") toast("Could not export.");
+      }
+      return;
+    }
+    download(json + "\n", name, "application/json");
+  }
+
+  // ---- Wiring ---------------------------------------------------------------
+  ta.addEventListener("input", schedule);
+  ta.addEventListener("scroll", syncScroll);
+  ["keyup", "click", "select"].forEach(function (ev) { ta.addEventListener(ev, showCursor); });
+  ta.addEventListener("keydown", function (e) {
+    if (e.key === "Tab" && !e.shiftKey && !e.metaKey && !e.ctrlKey && !e.altKey) { e.preventDefault(); insertText("  "); }
+  });
+  window.addEventListener("resize", syncScroll);
+
+  document.addEventListener("keydown", function (e) {
+    var mod = e.metaKey || e.ctrlKey;
+    if (!mod) return;
+    var k = e.key.toLowerCase();
+    if (k === "s" && e.shiftKey) { e.preventDefault(); saveAs(); }
+    else if (k === "s") { e.preventDefault(); save(); }
+    else if (k === "o") { e.preventDefault(); openFile(); }
+  });
+
+  $("b-new").addEventListener("click", function () { if (confirmDiscard()) setDocument(newTemplate(), "Untitled.vmgx", null); });
+  $("b-open").addEventListener("click", openFile);
+  $("b-save").addEventListener("click", save);
+  $("b-saveas").addEventListener("click", saveAs);
+  $("b-format").addEventListener("click", function () {
+    analyze();
+    var a = state.analysis;
+    if (a && a.ok && a.formatted && a.formatted !== ta.value) replaceAll(a.formatted);
+  });
+  $("b-copy").addEventListener("click", function () {
+    var json = currentJSON();
+    if (json === null) return;
+    navigator.clipboard.writeText(json).then(function () {
+      toast(state.mode === "typed" ? "Typed JSON copied" : "JSON copied");
+    }, function () { toast("Copying is not allowed here."); });
+  });
+  $("b-export").addEventListener("click", exportJSON);
+
+  document.querySelectorAll(".tabs button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      state.mode = b.getAttribute("data-mode");
+      document.querySelectorAll(".tabs button").forEach(function (x) { x.setAttribute("aria-selected", String(x === b)); });
+      $("b-copy").textContent = state.mode === "typed" ? "Copy typed JSON" : "Copy JSON";
+      $("b-export").textContent = state.mode === "typed" ? "Export typed JSON" : "Export JSON";
+      showPreview();
+    });
+  });
+
+  msg.addEventListener("click", function () {
+    var a = state.analysis;
+    if (!a || a.ok || !a.error) return;
+    ta.focus();
+    ta.setSelectionRange(a.error.offset, a.error.offset);
+    var lh = parseFloat(getComputedStyle(ta).lineHeight);
+    ta.scrollTop = Math.max(0, (a.error.line - 1) * lh - ta.clientHeight / 2);
+    syncScroll(); showCursor();
+  });
+
+  $("picker").addEventListener("change", async function () {
+    var f = this.files && this.files[0];
+    if (f) setDocument(await f.text(), f.name, null);
+    this.value = "";
+  });
+
+  // Drag and drop a file anywhere on the window.
+  var depth = 0;
+  window.addEventListener("dragenter", function (e) {
+    if (e.dataTransfer && Array.prototype.indexOf.call(e.dataTransfer.types, "Files") >= 0) { depth++; $("drop").hidden = false; }
+  });
+  window.addEventListener("dragleave", function () { if (--depth <= 0) { depth = 0; $("drop").hidden = true; } });
+  window.addEventListener("dragover", function (e) { e.preventDefault(); });
+  window.addEventListener("drop", async function (e) {
+    e.preventDefault(); depth = 0; $("drop").hidden = true;
+    var item = e.dataTransfer.items && e.dataTransfer.items[0];
+    if (!confirmDiscard()) return;
+    if (item && item.getAsFileSystemHandle) {
+      try { var h = await item.getAsFileSystemHandle(); if (h && h.kind === "file") { await openHandle(h); return; } } catch (err) { /* fall back */ }
+    }
+    var f = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f) setDocument(await f.text(), f.name, null);
+  });
+
+  window.addEventListener("beforeunload", function (e) {
+    if (isDirty()) { e.preventDefault(); e.returnValue = ""; }
+  });
+
+
+  setDocument(newTemplate(), "Untitled.vmgx", null);
+  showCursor();
+})();
+</script>
+</body>
+</html>

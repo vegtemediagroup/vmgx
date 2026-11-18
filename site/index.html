@@ -57,20 +57,18 @@
   .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
   .brand { display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; }
   .brand:hover { color: #fff; }
-  .brand img, .brand .mono { width: 36px; height: 36px; border-radius: 4px; }
+  .brand img { width: 36px; height: 36px; border-radius: 4px; }
   .brand strong { font-family: var(--serif); font-size: 1.5rem; font-weight: 700; letter-spacing: .06em; }
   .brand span.sub { display: block; font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-light); margin-top: -4px; }
   .nav nav { display: flex; gap: 28px; }
   .nav nav a { color: #d9deea; text-decoration: none; font-size: .92rem; letter-spacing: .02em; }
   .nav nav a:hover { color: var(--gold-light); }
-  .mono { display: inline-grid; place-items: center; background: var(--gold); color: var(--navy-900); font-family: var(--serif); font-weight: 700; font-size: 1.3rem; }
 
   /* Hero */
   .hero { background: radial-gradient(1200px 500px at 85% -10%, rgba(200,162,74,.16), transparent 60%), linear-gradient(180deg, var(--navy-900), var(--navy-800)); color: #fff; padding: 88px 0 96px; position: relative; overflow: hidden; }
   .hero::after { content: ""; position: absolute; inset: auto 0 0 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
   .hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
-  .hero-logo { width: 96px; height: 96px; border-radius: 8px; margin-bottom: 26px; box-shadow: 0 0 0 1px rgba(200,162,74,.4); }
-  .hero .mono.hero-logo { font-size: 3.2rem; }
+  .hero-logo { width: 104px; height: 104px; margin: 0 0 22px -8px; }
   .hero h1 { font-size: clamp(3.4rem, 8vw, 5.6rem); font-weight: 700; letter-spacing: .04em; margin-bottom: .1em; }
   .hero .expansion { font-family: var(--serif); font-style: italic; font-size: 1.5rem; color: var(--gold-light); margin-bottom: 1.2rem; }
   .hero p { color: #c9d0e0; font-size: 1.12rem; max-width: 520px; }
@@ -200,7 +198,6 @@
     .hero { padding: 44px 0 60px; }
     .hero .wrap { gap: 40px; }
     .hero-logo { width: 72px; height: 72px; margin-bottom: 18px; }
-    .hero .mono.hero-logo { font-size: 2.4rem; }
     .hero .expansion { font-size: 1.25rem; }
     .hero p { font-size: 1.05rem; }
     .btns { gap: 10px; }
@@ -235,7 +232,7 @@
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="#top">
-      <img src="logo.png" alt="" data-fallback="mono">
+      <img src="logo.svg" alt="">
       <span><strong>VMGX</strong><span class="sub">Vegte Media Group</span></span>
     </a>
     <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav"><span></span><span></span><span></span></button>
@@ -245,6 +242,7 @@
       <a href="#playground">Playground</a>
       <a href="#rules">Rules</a>
       <a href="#compare">Compared</a>
+      <a href="editor.html">Editor</a>
       <a href="#use">Get started</a>
       <a href="spec.html">Specification</a>
       <a href="https://codeberg.org/vmgx/vmgx">Source</a>
@@ -258,7 +256,7 @@
 <div class="hero">
   <div class="wrap">
     <div>
-      <img class="hero-logo" src="logo.png" alt="VMGX logo" data-fallback="mono">
+      <img class="hero-logo" src="logo.svg" alt="VMGX logo">
       <h1>VMGX</h1>
       <div class="expansion">Vegte Media Group Extended</div>
       <p>A lightweight, human-readable data format for structured records, rich metadata and long-term digital preservation.</p>
@@ -658,6 +656,7 @@ vmgx fmt       record.vmgx</pre>
       </div>
       <div>
         <h3>Downloads</h3>
+        <a class="dl" href="editor.html"><div><strong>VMGX Editor</strong><span>Open, edit, check and save .vmgx files in your browser</span></div><span class="arrow">→</span></a>
         <a class="dl" href="https://codeberg.org/vmgx/vmgx"><div><strong>Source code</strong><span>All code, the specification and issue tracker on Codeberg</span></div><span class="arrow">→</span></a>
         <a class="dl" href="spec.html"><div><strong>Specification</strong><span>The complete rules of VMGX 1.0, version 1.0.1</span></div><span class="arrow">→</span></a>
         <a class="dl" href="vmgx-1.0.1.vsix" download><div><strong>vmgx-1.0.1.vsix</strong><span>Extension for Visual Studio Code</span></div><span class="arrow">↓</span></a>
@@ -740,19 +739,6 @@ comment  = "#" to end of line</pre>
 <script>
 (function () {
   "use strict";
-
-  // Logo fallback: a gold monogram if logo.png is missing.
-  document.querySelectorAll("img[data-fallback]").forEach(function (img) {
-    function swap() {
-      var m = document.createElement("span");
-      m.className = "mono " + img.className;
-      m.textContent = "V";
-      m.setAttribute("aria-hidden", "true");
-      img.replaceWith(m);
-    }
-    if (img.complete && img.naturalWidth === 0) swap();
-    else img.addEventListener("error", swap);
-  });
 
   document.getElementById("year").textContent = new Date().getFullYear();
 
