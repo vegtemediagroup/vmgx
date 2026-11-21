@@ -38,7 +38,7 @@ pip install vmgx         # Python 3.11+, includes the `vmgx` command
 | [`js/`](js) | Reference parser for JavaScript: the `@vmgx/vmgx` npm package |
 | [`python/`](python) | Reference parser for Python: the `vmgx` PyPI package |
 | [`conformance/`](conformance) | 16 valid and 42 invalid test files that define VMGX exactly |
-| [`vscode/`](vscode) | Extension for Visual Studio Code |
+| [`vscode/`](vscode) | Extension for Visual Studio Code ([on the Marketplace](https://marketplace.visualstudio.com/items?itemName=vegtemediagroup.vmgx)) |
 | [`mac/`](mac) | VMGX for Mac: editor and Finder preview |
 | [`site/`](site) | The website |
 | [`examples/`](examples) | Example records |
