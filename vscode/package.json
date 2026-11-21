@@ -2,8 +2,13 @@
   "name": "vmgx",
   "displayName": "VMGX",
   "description": "Syntax colors, live error checking, formatting and JSON conversion for VMGX (.vmgx) files.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "vegtemediagroup",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#0b1530",
+    "theme": "dark"
+  },
   "license": "MIT",
   "homepage": "https://vmgx.vegte.org",
   "repository": {
