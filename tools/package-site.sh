@@ -12,6 +12,6 @@ zip -qr site/vmgx-conformance.zip conformance
 (cd vscode && npx -y @vscode/vsce package -o ../site/vmgx-vscode.vsix >/dev/null)
 (cd site && zip -qr ../dist/vmgx-website.zip index.html spec.html editor.html analytics.js \
     vmgx.js vmgx-render.js vmgx.py \
-    example.vmgx logo.svg LICENSE.txt vmgx-conformance.zip vmgx-vscode.vsix \
+    example.vmgx logo.svg LICENSE.txt sitemap.xml robots.txt vmgx-conformance.zip vmgx-vscode.vsix \
     $(ls favicon.png logo.png 2>/dev/null || true))
 echo "✓ dist/vmgx-website.zip"

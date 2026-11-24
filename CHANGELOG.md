@@ -6,6 +6,7 @@
 - Google Tag Manager on every page, loaded only after the visitor accepts the cookie banner; "Cookie settings" link in each footer
 - `tools/sync.sh` checks that every page includes `analytics.js`
 - New VMGX Editor (`editor.html`): open, edit, check, preview and save `.vmgx` files in the browser
+- Sitemap (`sitemap.xml`) and `robots.txt` for search engines
 - VS Code extension 1.0.2 is on the Visual Studio Marketplace (`vegtemediagroup.vmgx`); the site links to it
 - The VMGX logo (`logo.svg`) is part of the site, in the site's gold so it stands out on the navy header
 
